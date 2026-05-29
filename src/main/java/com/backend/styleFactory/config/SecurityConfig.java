@@ -51,7 +51,18 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/servicios/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/servicios/**").hasRole("ADMIN")
-                        .requestMatchers("/empleados/**").hasAnyRole("ADMIN", "EMPLEADO")
+                        .requestMatchers(HttpMethod.PUT, "/servicios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servicios/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/reservas/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/reservas/**").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.PUT, "/reservas/**").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.DELETE, "/reservas/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/empleados/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/empleados/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/empleados/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/empleados/**").hasRole("ADMIN")
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 )
