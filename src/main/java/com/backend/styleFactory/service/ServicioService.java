@@ -58,14 +58,12 @@ public class ServicioService {
     public ServicioResponseDTO update(Long id, ServicioRequestDTO dto) {
         Servicio existente = servicioRepository.findById(id).orElse(null);
         if (existente == null) return null;
-
         existente.setNombre(dto.getNombre());
         existente.setDescripcion(dto.getDescripcion());
         existente.setUrlImagen(dto.getUrlImagen());
         existente.setPrecio(dto.getPrecio());
         existente.setTipoServicio(dto.getTipoServicio());
         existente.setEstado(dto.isEstado());
-
         return ServicioResponseDTO.desde(servicioRepository.save(existente));
     }
 

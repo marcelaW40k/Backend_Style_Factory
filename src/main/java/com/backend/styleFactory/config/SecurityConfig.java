@@ -45,10 +45,9 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints públicos
-                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         // Endpoints restringidos por rol
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/servicios/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/servicios/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/servicios/**").hasRole("ADMIN")
