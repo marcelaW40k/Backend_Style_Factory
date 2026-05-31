@@ -88,9 +88,6 @@ public class UsuarioService {
         usuario.setNombre(dto.getNombre());
         usuario.setCorreo(dto.getCorreo());
         usuario.setTelefono(dto.getTelefono());
-        usuario.setContrasena(dto.getContrasena());
-        usuario.setContrasena(dto.getContrasena());
-        usuario.setRol(dto.getRol());
         if (dto.getContrasena() != null && !dto.getContrasena().isBlank()) {
             usuario.setContrasena(dto.getContrasena());
         }
