@@ -54,14 +54,19 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/servicios/**").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/reservas/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/reservas/**").hasRole("CLIENTE")
-                        .requestMatchers(HttpMethod.PUT, "/reservas/**").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/reservas/**").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.PUT, "/reservas/**").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.DELETE, "/reservas/**").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/empleados/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/empleados/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/empleados/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/empleados/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/horarios/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/horarios/**").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.PUT, "/horarios/**").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.DELETE, "/horarios/**").hasAnyRole("ADMIN", "CLIENTE")
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 )

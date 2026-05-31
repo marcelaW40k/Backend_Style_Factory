@@ -89,7 +89,14 @@ public class UsuarioService {
         usuario.setCorreo(dto.getCorreo());
         usuario.setTelefono(dto.getTelefono());
         usuario.setContrasena(dto.getContrasena());
+        usuario.setContrasena(dto.getContrasena());
         usuario.setRol(dto.getRol());
+        if (dto.getContrasena() != null && !dto.getContrasena().isBlank()) {
+            usuario.setContrasena(dto.getContrasena());
+        }
+        if (dto.getRol() != null) {
+            usuario.setRol(dto.getRol());
+        }
 
         Usuario actualizado = usuarioRepository.save(usuario);
         return mapearAResponse(actualizado);
