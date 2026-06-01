@@ -58,6 +58,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/reservas/**").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.DELETE, "/reservas/**").hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/empleados/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/empleados/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/empleados/**").hasRole("ADMIN")
