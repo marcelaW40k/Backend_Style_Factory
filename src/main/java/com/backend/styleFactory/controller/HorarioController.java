@@ -1,5 +1,6 @@
 package com.backend.styleFactory.controller;
 
+import com.backend.styleFactory.DTO.HorarioAgrupadoDTO;
 import com.backend.styleFactory.DTO.HorarioRequestDTO;
 import com.backend.styleFactory.DTO.HorarioResponseDTO;
 import com.backend.styleFactory.service.HorarioService;
@@ -24,6 +25,11 @@ public class HorarioController {
 
     @GetMapping
     public List<HorarioResponseDTO> listarHorarios() {
-        return horarioService.listarHorarios();
+        return horarioService.findAll();
+    }
+
+    @GetMapping("/agrupados")
+    public List<HorarioAgrupadoDTO> listarAgrupados() {
+        return horarioService.findAllAgrupados();
     }
 }

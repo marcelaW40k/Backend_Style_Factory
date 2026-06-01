@@ -1,5 +1,6 @@
 package com.backend.styleFactory.service;
 
+import com.backend.styleFactory.DTO.HorarioAgrupadoDTO;
 import com.backend.styleFactory.DTO.HorarioRequestDTO;
 import com.backend.styleFactory.DTO.HorarioResponseDTO;
 import com.backend.styleFactory.model.Empleado;
@@ -9,6 +10,7 @@ import com.backend.styleFactory.repository.HorarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,18 @@ public class HorarioService {
                           EmpleadoRepository empleadoRepository) {
         this.horarioRepository = horarioRepository;
         this.empleadoRepository = empleadoRepository;
+    }
+
+    /**
+     * Lista todos los horarios registrados, incluyendo el ID del empleado asociado.
+     *
+     * @return Lista de HorarioResponseDTO
+     */
+    public List<HorarioResponseDTO> findAll(){
+        return horarioRepository.findAll()
+                .stream()
+                .map(HorarioResponseDTO::desde)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -38,25 +52,55 @@ public class HorarioService {
         Horario horario = new Horario(empleado, requestDTO.getFechaHora());
         Horario guardado = horarioRepository.save(horario);
 
-        return new HorarioResponseDTO(
-                guardado.getIdHorario(),
-                guardado.getFechaHora(),
-                guardado.getEmpleado().getId()
-        );
+        return HorarioResponseDTO.desde(guardado);
     }
 
-    /**
-     * Lista todos los horarios registrados, incluyendo el ID del empleado asociado.
-     *
-     * @return Lista de HorarioResponseDTO
-     */
-    public List<HorarioResponseDTO> listarHorarios() {
-        return horarioRepository.findAll().stream()
-                .map(horario -> new HorarioResponseDTO(
-                        horario.getIdHorario(),
-                        horario.getFechaHora(),
-                        horario.getEmpleado() != null ? horario.getEmpleado().getId() : null
-                ))
-                .collect(Collectors.toList());
+
+    public List<HorarioAgrupadoDTO> findAllAgrupados() {
+
+        List<Horario> horarios = horarioRepository.findAll();
+
+        Map<Long, List<Horario>> horariosPorEmpleado =
+                horarios.stream()
+                        .collect(Collectors.groupingBy(
+                                h -> h.getEmpleado().getId()
+                        ));
+
+        return horariosPorEmpleado.values()
+                .stream()
+                .map(listaHorarios -> {
+
+                    Horario primerHorario =
+                            listaHorarios.get(0);
+
+                    HorarioAgrupadoDTO dto = new HorarioAgrupadoDTO();
+
+                    dto.setIdEmpleado(primerHorario.getEmpleado().getId());
+                    dto.setNombreEmpleado(primerHorario.getEmpleado()
+                                    .getUsuario()
+                                    .getNombre()
+                    );
+                    dto.setIdUsuario(primerHorario.getEmpleado().getUsuario().getId());
+                    dto.setEspecialidad(primerHorario.getEmpleado().getEspecialidad());
+                    dto.setUrlImagen(primerHorario.getEmpleado().getUrl());
+                    Map<String, List<String>> fechas = listaHorarios
+                                    .stream()
+                                    .collect(Collectors.groupingBy(h -> h.getFechaHora()
+                                                    .toLocalDate()
+                                                    .toString(),
+                                            Collectors.mapping(h -> h.getFechaHora()
+                                                            .toLocalTime()
+                                                            .toString(), Collectors.toList()
+                                            )
+                                    ));
+
+                    dto.setFechas(fechas);
+
+                    return dto;
+
+                })
+                .toList();
     }
+
+
 }
